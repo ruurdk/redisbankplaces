@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "country":"The Netherlands",
+    "branch": "Retail Banking",
+    "name": "ABN AMRO Bank N.V.",
+    "address":"Foppingadreef 22\n1102 BS Amsterdam",
+    "phone": "0900 0024 / +31 (0)10 241 1720"
+  },
+  {
+    "id": 2,
+    "country":"The Netherlands",
+    "branch": "Private Banking",
+    "name": "ABN AMRO MeesPierson",
+    "address":"Foppingadreef 22\n1102 BS Amsterdam",
+    "phone": "0800 0240734 / +31 (0)20 628 8866"
+  },
+  {
+    "id": 3,
+    "country":"The Netherlands",
+    "branch": "Commercial Banking",
+    "name": "ABN AMRO Bank N.V.",
+    "address":"Gustav Mahlerlaan 10\n1082 PP Amsterdam",
+    "phone": "-"
+  },
+  {
+    "id": 4,
+    "country":"The Netherlands",
+    "branch": "Leas",
+    "name": "ABN AMRO Lease",
+    "address":"Vliegend Hertlaan 77\n3526 KT Utrecht",
+    "phone": "+31 (0)30 290 64 06"
+  }
+]

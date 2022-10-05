@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+
+  app-redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    networks:
+      - redis-bankplaces-network
+    restart: always
+
+  app-redisbankplaces:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_HOST=app-redis
+      - REDIS_PORT=6379
+    ports:
+      - "8080:8080"
+    networks:
+      - redis-bankplaces-network
+    restart: always
+    depends_on:
+      - app-redis
+
+networks:
+  redis-bankplaces-network:
+    driver: bridge
