@@ -23,33 +23,20 @@
 
 <script>
 
-function lon2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); }
-
-function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); }
-
-function rad2deg(radians)
-{
-  return radians * (180/Math.PI);
-}
-
-function openstreetmap_iframe(lon, lat, zoom) {
-	var xtile = lon2tile(lon, zoom);
-	var ytile = lat2tile(lat, zoom);
-	var n = Math.pow(2, zoom);
-	var lon_deg = xtile / n * 360.0 - 180.0;
-	var lat_deg = rad2deg(Math.atan(Math.sinh(Math.PI * (1 - 2 * ytile / n))));
-
-	var urliframe = 'https://www.openstreetmap.org/export/embed.html?bbox='+lon+'%2C'+lat+'%2C'+lon_deg+'%2C'+lat_deg+'&amp;marker='+lat+'%2C'+lon+'&amp;layers=ND';
-	return urliframe;
-}
-
 function redisbankplacesmap(id) {
+    // check result and get response time
+    $.get("/api/location/"+id, function( data ) {
+        $("#redisbankplacesmapResponseTime").html("Located office from Geocoding server in ... "+data.responseTime + " (ms)");
+        //alert("Load was performed. " + data);
+    });
+
+    // get proper url for embedded iframe
     var html5=  '<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" '
-    //+ 'src="'+ openstreetmap_iframe(4.9505639, 52.310395, 16)  +'" width=600 height=400 />';
     + 'src="/api/openstreetmapembed/'+id+'" width=600 height=400 />';
 
     //alert(openstreetmap_iframe(4.9505639, 52.310395, 16));
-    $("#redisbankplacesmap").html("Loaded in ... (ms)<br/>").append(html5);
+
+    $("#redisbankplacesmap").html(html5);
 }
 </script>
 
@@ -112,7 +99,7 @@ function redisbankplacesmap(id) {
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6 col-12">
-                                    <h4 class="card-title">Account holder: L.S. Rosenquist, Nieuwegein, The Netherlands
+                                    <h4 class="card-title">Account holder: Alex V., Redis, International holder
                                     </h4>
                                 </div>
                             </div>
@@ -163,6 +150,7 @@ function redisbankplacesmap(id) {
                         </div>
                         <div class="card-content">
                             <div class="card-body">
+                                <div id="redisbankplacesmapResponseTime"></div>
                                 <form class="form form-horizontal">
                                     <div class="form-body">
                                         <div class="row">
