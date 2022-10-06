@@ -63,11 +63,6 @@ public class PlaceLocationController {
 
         Jedis rc = jedis.getResource();
         try {
-            if (withCache) {
-                if (rc.exists(key))
-                    return LonLat.fromString(rc.get(key));
-            }
-
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
             HttpGet getRequest = new HttpGet(API + URLEncoder.encode(addr, StandardCharsets.UTF_8));
             getRequest.addHeader("accept", "application/json");
@@ -87,11 +82,6 @@ public class PlaceLocationController {
                 return result;
             }
 
-            // Set the value into Redis only if the cache is enabled
-            if (withCache) {
-                rc.set(key, result.toString());
-                rc.expire(key, 60);
-            }
             return result;
         } finally {
             rc.close();
