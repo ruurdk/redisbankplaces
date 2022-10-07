@@ -18,7 +18,9 @@ Features in **Redisbank Places**:
 > - The UI and architecture is inspired from Lars' work with Redis Bank application https://github.com/Redislabs-Solution-Architects/redisbank/ 
 
 # Architecture
-<img src="architecture.png"/>
+<img src="img_architecture.png"/>
+
+<img src="img_redisbankplaces.png"/>
 
 # Getting Started
 
