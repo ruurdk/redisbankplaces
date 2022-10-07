@@ -43,6 +43,7 @@ public class PlaceLocationController {
         try {
             String addr = rc.hget("Places:"+id, "address");
             LonLat lonlat = lonlatExternalAPI(id, addr, true);
+            lonlat.setResponseTime(System.currentTimeMillis()-ts);// keep time it took to find it (ms)
             return lonlat;
         } finally {
             log.info("/location/"+id + " in (ms) "+(System.currentTimeMillis()-ts));
@@ -68,6 +69,7 @@ public class PlaceLocationController {
             getRequest.addHeader("accept", "application/json");
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String wsCall = httpClient.execute(getRequest, responseHandler);
+            // see URL example above for a sample output JSON
 
             // increment the counter of API call
             rc.incrBy("API:openstreetmap", 1);
@@ -88,6 +90,9 @@ public class PlaceLocationController {
         }
     }
 
+    /**
+     * Not used as Google Map requires an API key for use in embed/iframe
+     */
     @GetMapping("/googlemap/{id}")
     public ResponseEntity<String> googleMapRedirect(@PathVariable("id") String id) {
         LonLat lonlat = locatePlace(id);
@@ -98,6 +103,9 @@ public class PlaceLocationController {
                         "/@"+lonlat.getLat()+","+lonlat.getLon()+",16z")).build();
     }
 
+    /**
+     * Not used as OpenStreetMap has another API  for use in embed/iframe
+     */
     @GetMapping("/openstreetmap/{id}")
     public ResponseEntity<String> openStreetMapRedirect(@PathVariable("id") String id) {
         LonLat lonlat = locatePlace(id);
@@ -108,11 +116,13 @@ public class PlaceLocationController {
                                 "&zoom=16")).build();
     }
 
+    /**
+     * Locate the geo-coordinate lon lat and build OpenStreetMap url for embed use.
+     */
     @GetMapping("/openstreetmapembed/{id}")
     public ResponseEntity<String> openStreetMapEmbedRedirect(@PathVariable("id") String id) {
         LonLat lonlat = locatePlace(id);
         if (lonlat.isNaN()) return ResponseEntity.notFound().build();
-        // http://www.openstreetmap.org/?mlat=latitude&mlon=longitude&zoom=12
         return ResponseEntity.status(HttpStatus.FOUND).location(
                 URI.create(
                         openstreetmap_iframe(Double.valueOf(lonlat.getLon()), Double.valueOf(lonlat.getLat()), 13)
@@ -125,7 +135,10 @@ public class PlaceLocationController {
 
     private double rad2deg(double radians) { return radians * (180/Math.PI); }
 
-
+    /**
+     * OpenStreetMap for embed use requires calculation from coordinate to bounding box
+     * see https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#PHP for an example
+     */
     private String openstreetmap_iframe(double lon, double lat, int zoom) {
         double xtile = lon2tile(lon, zoom);
         double ytile = lat2tile(lat, zoom);
@@ -136,9 +149,4 @@ public class PlaceLocationController {
         String urliframe = "https://www.openstreetmap.org/export/embed.html?bbox="+lon+"%2C"+lat+"%2C"+lon_deg+"%2C"+lat_deg+"&marker="+lat+"%2C"+lon+"&layers=ND";
         return urliframe;
     }
-    // see https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#PHP
-
-
-
-
 }

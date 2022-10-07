@@ -4,7 +4,7 @@ var transactionsOverview = new Vue({
     items: [],
     received_messages: [],
     connected: false,
-    account: 'Lars',//TODO this one is hardcoded vs using the login info
+    account: 'Alex',//TODO this one is hardcoded vs using the login info
     balance: '',
     question: '',
     searchitems: [],

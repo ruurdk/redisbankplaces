@@ -11,13 +11,15 @@ public class LonLat {
     private String lon;
     private String lat;
 
+    private long responseTime;
+
     public String toString() {
         return lon+","+lat;
     }
 
     public static LonLat fromString(String lonlat) {
         String[] ll = lonlat.split(",");
-        return new LonLat(ll[0], ll[1]);
+        return new LonLat(ll[0], ll[1], 0);
     }
 
     public boolean isNaN() {

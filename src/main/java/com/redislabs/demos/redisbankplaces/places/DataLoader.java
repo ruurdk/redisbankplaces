@@ -49,6 +49,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         Jedis rc = jedis.getResource();
         Pipeline rp = rc.pipelined();
         for (Place p : places) {
+            log.info(" Loading into Redis: " + p.getBranch()+ ": "+ p.getName() + " | " + p.getAddress().replace("\n", " "));
             rp.hmset("Places:" + p.getId(),
                     mapper.convertValue(
                             p, Map.class
